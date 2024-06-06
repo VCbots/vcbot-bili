@@ -10,8 +10,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [windows,macos,ubuntu]
-        runs-on: ${{matrix.os}}-latest
+                os: [macos-latest,ubuntu-latest,windows-latest]
+        runs-on: ${{matrix.os}}
         steps:
         - uses: actions/checkout@v4
         - name: Setup Python
@@ -26,9 +26,27 @@ jobs:
         - name: Install dependencies
           run: pip install -r requirements.txt
         - name: Build
-          run: pyinstaller  -F -w --hidden-import=PIL._tkinter_finder --additional-hooks-dir=hooks main.py -n vcbot-bili -i=.res/icon.ico
+          run: pyinstaller  -F -w --hidden-import=PIL._tkinter_finder --additional-hooks-dir=hooks main.py -n vcbot-bili -i .res/icon.ico
         - name: Upload
           uses: actions/upload-artifact@v4
           with: 
             name: build-${{matrix.os}}
+            path: ./dist/*
+    build-windows:
+        if: false
+        runs-on: windows-latest
+        steps:
+        - uses: actions/checkout@v4
+        - name: Setup Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: 3.8
+        - name: Install dependencies
+          run: pip install -r requirements.txt
+        - name: Build
+          run: pyinstaller  -F -w --hidden-import=PIL._tkinter_finder --additional-hooks-dir=hooks main.py -n vcbot-bili -i .res\icon.ico
+        - name: Upload
+          uses: actions/upload-artifact@v4
+          with: 
+            name: build-${{runner.os}}
             path: ./dist/*

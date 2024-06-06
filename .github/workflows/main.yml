@@ -1,0 +1,34 @@
+name: build CI
+
+on:
+    push:
+        branches: master
+    workflow_dispatch:
+
+jobs:
+    build:
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [windows,macos,ubuntu]
+        runs-on: ${{matrix.os}}-latest
+        steps:
+        - uses: actions/checkout@v4
+        - name: Setup Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: 3.8
+        - name: Install dependencies(for linux)
+          if: ${{runner.os == 'Linux'}}
+          run: |
+            sudo apt-get update
+            sudo apt-get install python-tk
+        - name: Install dependencies
+          run: pip install -r requirements.txt
+        - name: Build
+          run: pyinstaller -F -w --hidden-import=PIL._tkinter_finder --additional-hooks-dir=hooks main.py -n vcbot-bili
+        - name: Upload
+          uses: actions/upload-artifact@v4
+          with: 
+            name: build-${{matrix.os}}
+            path: ./dist/vcbot-bili

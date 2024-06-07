@@ -58,24 +58,32 @@ def main():
 
     @live.LiveDanma.on('WELCOME')
     async def welcome(event):
-        # 老爷进入直播间
-        print(json.dumps(event,ensure_ascii=False))
+        # 老爷进入直播间,todo
+        info=json.dumps(event,ensure_ascii=False)
+        with open(file="./welcome.json",mode="w",encoding="utf-8") as log:
+            log.write(info)
 
     @live.LiveDanma.on('INTERACT_WORD')
     async def on_welcome(event):
         # 用户进入直播间
+        text=content.get_danmaku_on_wuser(event=event)
+        try:
+            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
+        except:
+            print("\n")
         print(json.dumps(event,ensure_ascii=False))
 
     @live.LiveDanma.on('WELCOME_GUARD')
     async def on_welcome_guard(event):
-        # 房管进入直播间
-        print(json.dumps(event,ensure_ascii=False))
-
+        # 房管进入直播间,todo
+        info=json.dumps(event,ensure_ascii=False)
+        with open(file="./welcome-guard.json",mode="w",encoding="utf-8") as log:
+            log.write(info)
     @live.LiveDanma.on('SEND_GIFT')
     async def on_gift(event):
-        # 收到礼物,todo
+        # 收到礼物
         print(json.dumps(event,ensure_ascii=False))
-        text = content.get_danmaku_ongift(event=event)
+        text = content.get_danmaku_on_gift(event=event)
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except:

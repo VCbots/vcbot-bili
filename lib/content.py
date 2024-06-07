@@ -14,7 +14,7 @@ def get_danmaku_content(event:str):
 def get_danmaku_on_gift(event:str):
     info = event['data']['data']
     giftname=info['giftName']
-    name= info['sender_uinfo']['base']['name']
+    name= info['uname']
     try:
         contents=str(main.config.roomcfg["chat"]["global"]["events"]['gifts'])
         content_name=contents.replace(" {user} ",f"{name}")
@@ -36,3 +36,15 @@ def get_danmaku_on_wuser(event:str):
         raise
 
     return content_name
+
+def get_danmaku_on_buyguard(event:str):
+    info = event['data']
+    giftname=info['gift_name']
+    name= info['username']
+    try:
+        contents=str(main.config.roomcfg["chat"]["global"]["events"]['gifts'])
+        content_name=contents.replace(" {user} ",f"{name}")
+        contented=content_name.replace(" {gift} ",f"{giftname}")
+    except:
+        print(contented)
+        raise

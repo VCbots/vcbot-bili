@@ -32,6 +32,16 @@ def main():
             print("connect command not found!")
         print(event)
     
+    @live.LiveDanma.on('GUARD_BUY')
+    async def on_guard(event):
+        #上舰
+        text=content.get_danmaku_on_buyguard(event=event)
+        try:
+            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
+        except:
+            print("\n")
+        print(json.dumps(event,ensure_ascii=False))
+
     @live.LiveDanma.on('DANMU_MSG')
     async def on_danmaku(event):
         # 收到弹幕.
@@ -53,9 +63,7 @@ def main():
             print("\n")
 
 
-        name=await user.user_info(uid=Uid,Credential=c)
-        print(json.dumps(event,ensure_ascii=False))
-        print(name["name"],event["data"]["info"][1])
+
 
     @live.LiveDanma.on('WELCOME')
     async def welcome(event):

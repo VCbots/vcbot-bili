@@ -7,5 +7,5 @@ def loadroomcfg():
     global room
     room=os.environ["roomid"]
     global roomcfg
-    roomcfg = json.load(open(f"./{room}.json"))
+    roomcfg = json.load(open(f"./{room}.json",encoding="utf-8",errors="ignore"))
     return

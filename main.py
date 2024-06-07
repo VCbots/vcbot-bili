@@ -18,7 +18,7 @@ def login():
         except:
             print("error!")
         finally:
-            with open(file="./cookie.json",mode="w",encoding="utf-8") as cookies:
+            with open(file="./cookie.json",mode="w",encoding="utf-8",errors="ignore") as cookies:
                 cookies.write(coco)
 
 
@@ -52,6 +52,7 @@ def main():
         except:
             print("\n")
 
+
         name=await user.user_info(uid=Uid,Credential=c)
         print(json.dumps(event,ensure_ascii=False))
         print(name["name"],event["data"]["info"][1])
@@ -60,7 +61,7 @@ def main():
     async def welcome(event):
         # 老爷进入直播间,todo
         info=json.dumps(event,ensure_ascii=False)
-        with open(file="./welcome.json",mode="w",encoding="utf-8") as log:
+        with open(file="./welcome.json",mode="w",encoding="utf-8",errors="ignore") as log:
             log.write(info)
 
     @live.LiveDanma.on('INTERACT_WORD')
@@ -71,13 +72,14 @@ def main():
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except:
             print("\n")
+
         print(json.dumps(event,ensure_ascii=False))
 
     @live.LiveDanma.on('WELCOME_GUARD')
     async def on_welcome_guard(event):
         # 房管进入直播间,todo
         info=json.dumps(event,ensure_ascii=False)
-        with open(file="./welcome-guard.json",mode="w",encoding="utf-8") as log:
+        with open(file="./welcome-guard.json",mode="w",encoding="utf-8",errors="ignore") as log:
             log.write(info)
     @live.LiveDanma.on('SEND_GIFT')
     async def on_gift(event):
@@ -88,6 +90,7 @@ def main():
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except:
             print("\n")
+
     
     sync(live.LiveDanma.connect())
 

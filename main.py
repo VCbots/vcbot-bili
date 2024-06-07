@@ -25,7 +25,11 @@ def login():
 def main():     
     @live.LiveDanma.on('VERIFICATION_SUCCESSFUL')
     async def on_successful(event):
-        await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=config.roomcfg["connected"]))
+        # 连接成功
+        try:
+            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=config.roomcfg["connected"]))
+        except:
+            print("connect command not found!")
         print(event)
     
     @live.LiveDanma.on('DANMU_MSG')
@@ -52,15 +56,35 @@ def main():
         print(json.dumps(event,ensure_ascii=False))
         print(name["name"],event["data"]["info"][1])
 
+    @live.LiveDanma.on('WELCOME')
+    async def welcome(event):
+        # 老爷进入直播间
+        print(json.dumps(event,ensure_ascii=False))
+
+    @live.LiveDanma.on('INTERACT_WORD')
+    async def on_welcome(event):
+        # 用户进入直播间
+        print(json.dumps(event,ensure_ascii=False))
+
+    @live.LiveDanma.on('WELCOME_GUARD')
+    async def on_welcome_guard(event):
+        # 房管进入直播间
+        print(json.dumps(event,ensure_ascii=False))
 
     @live.LiveDanma.on('SEND_GIFT')
     async def on_gift(event):
         # 收到礼物,todo
         print(json.dumps(event,ensure_ascii=False))
+        text = content.get_danmaku_ongift(event=event)
+        try:
+            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
+        except:
+            print("\n")
     
     sync(live.LiveDanma.connect())
 
 if __name__ == "__main__" :
+
     config.loadroomcfg()
     print(config.roomcfg)
     login()

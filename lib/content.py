@@ -26,8 +26,6 @@ def get_danmaku_on_gift(event:str):
         contented=content_name.replace(" {gift} ",f"{giftname}")
     except:
         print(contented)
-
-
     return contented
 
 def get_danmaku_on_wuser(event:str):
@@ -38,18 +36,27 @@ def get_danmaku_on_wuser(event:str):
         content_name=contents.replace(" {user} ",f"{name}")
     except:
         print(content_name)
-
-
     return content_name
 
 def get_danmaku_on_buyguard(event:str):
     info = event['data']
     print(info)
-    #giftname=info['gift_name']
+    giftname=get_guard_type(int(info["guard_level"]))
     name= info['username']
     try:
         contents=str(main.config.roomcfg["chat"]["global"]["events"]['guard'])
         content_name=contents.replace(" {user} ",f"{name}")
-        #contented=content_name.replace(" {gift} ",f"{giftname}")
+        contented=content_name.replace(" {type} ",f"{giftname}")
     except:
         print(content_name)
+        print(contented)
+    return contented
+
+def get_guard_type(num:int):
+    if num == 1:
+        return "总督"
+    if num == 2:
+        return "提督"
+    if num == 3:
+        return "舰长"
+    

@@ -44,11 +44,12 @@ def get_danmaku_on_wuser(event:str):
 
 def get_danmaku_on_buyguard(event:str):
     info = event['data']
-    giftname=info['gift_name']
+    print(info)
+    #giftname=info['gift_name']
     name= info['username']
     try:
-        contents=str(main.config.roomcfg["chat"]["global"]["events"]['gifts'])
+        contents=str(main.config.roomcfg["chat"]["global"]["events"]['guard'])
         content_name=contents.replace(" {user} ",f"{name}")
-        contented=content_name.replace(" {gift} ",f"{giftname}")
+        #contented=content_name.replace(" {gift} ",f"{giftname}")
     except:
-        print(contented)
+        print(content_name)

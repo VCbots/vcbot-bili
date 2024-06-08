@@ -35,6 +35,7 @@ def main():
     @live.LiveDanma.on('GUARD_BUY')
     async def on_guard(event):
         # 上舰长/提督/总督
+        print(json.dumps(event,ensure_ascii=False))
         text=content.get_danmaku_on_buyguard(event=event)
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))

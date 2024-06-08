@@ -34,43 +34,25 @@ def main():
     
     @live.LiveDanma.on('GUARD_BUY')
     async def on_guard(event):
-        #上舰
+        # 上舰长/提督/总督
         text=content.get_danmaku_on_buyguard(event=event)
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except:
-            print("\n")
+            print(" ")
         print(json.dumps(event,ensure_ascii=False))
 
     @live.LiveDanma.on('DANMU_MSG')
     async def on_danmaku(event):
         # 收到弹幕.
-        Uid=event["data"]["info"][2][0]
-        print(Uid)
-        contents=event["data"]["info"][1]
         try:
             text=content.get_danmaku_content(event=event)
-            print(text)
-        except: #如果user不存在命令，走global
-            try:
-                text=config.roomcfg["chat"]["global"]["command"][contents]
-                print(text)
-            except KeyError:
-                print("\n")
+        except:
+            print(" ")
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except:
-            print("\n")
-
-
-
-
-    @live.LiveDanma.on('WELCOME')
-    async def welcome(event):
-        # 老爷进入直播间,todo
-        info=json.dumps(event,ensure_ascii=False)
-        with open(file="./welcome.json",mode="w",encoding="utf-8",errors="ignore") as log:
-            log.write(info)
+            print(" ")
 
     @live.LiveDanma.on('INTERACT_WORD')
     async def on_welcome(event):
@@ -79,16 +61,10 @@ def main():
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except:
-            print("\n")
+            print(" ")
 
         print(json.dumps(event,ensure_ascii=False))
 
-    @live.LiveDanma.on('WELCOME_GUARD')
-    async def on_welcome_guard(event):
-        # 房管进入直播间,todo
-        info=json.dumps(event,ensure_ascii=False)
-        with open(file="./welcome-guard.json",mode="w",encoding="utf-8",errors="ignore") as log:
-            log.write(info)
     @live.LiveDanma.on('SEND_GIFT')
     async def on_gift(event):
         # 收到礼物
@@ -97,9 +73,8 @@ def main():
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except:
-            print("\n")
+            print(" ")
 
-    
     sync(live.LiveDanma.connect())
 
 if __name__ == "__main__" :

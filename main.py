@@ -57,8 +57,12 @@ def main():
 
     @live.LiveDanma.on('INTERACT_WORD')
     async def on_welcome(event):
-        # 用户进入直播间
-        text=content.get_danmaku_on_wuser(event=event)
+        # 用户进入直播间/关注
+        types=event['data']['data']['msg_type'] #判断是关注还是进入
+        if types == 1:
+            text=content.get_danmaku_on_wuser(event=event)
+        if types == 2:
+            text=content.get_danmaku_on_user_followed(event=event)
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except:

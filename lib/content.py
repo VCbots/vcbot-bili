@@ -52,6 +52,17 @@ def get_danmaku_on_buyguard(event:str):
         print(contented)
     return contented
 
+def get_danmaku_on_user_followed(event:str):
+    print(event)
+    info = event['data']['data']
+    name= info['uname']
+    try:
+        contents=str(main.config.roomcfg["chat"]["global"]["events"]['followed'])
+        content_name=contents.replace(" {user} ",f"{name}")
+    except:
+        print(content_name)
+    return content_name
+
 def get_guard_type(num:int):
     if num == 1:
         return "总督"

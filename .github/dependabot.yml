@@ -1,10 +1,10 @@
 version: 2
 updates:
-  - package-eossystem: "pip"
+- package-eossystem: "pip"
     directory: "/"
     schedule:
       interval: "daily"
-  - package-eossystem: "github-actions"
+- package-eossystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"

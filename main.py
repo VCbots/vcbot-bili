@@ -58,8 +58,12 @@ def main():
     @live.LiveDanma.on('INTERACT_WORD')
     async def on_welcome(event):
         # 用户进入直播间/关注
-        uid=str(event['data']['data']['uid'] )
+        if event['data']['data']['is_spread'] == 1:
+            print('spread is true,ignore.')
+            return
+        uid=str(event['data']['data']['uid'] ) 
         if ignore.check_ban_inital(uid=uid) == True:
+            print('uid_ban is true,ignore.')
             return 
         types=event['data']['data']['msg_type'] #判断是关注还是进入
         if types == 1:

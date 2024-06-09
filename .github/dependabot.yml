@@ -1,6 +1,10 @@
 version: 2
 updates:
-  - package-eossystem: pip
-    directory: /
+  - package-eossystem: "pip"
+    directory: "/"
     schedule:
-      interval: daliy
+      interval: "daily"
+  - package-eossystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"

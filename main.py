@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-from lib import user,live,config,content
+from lib import user,live,config,content,ignore
 from bilibili_api import Credential,sync
 
 def login():
@@ -58,6 +58,9 @@ def main():
     @live.LiveDanma.on('INTERACT_WORD')
     async def on_welcome(event):
         # 用户进入直播间/关注
+        uid=str(event['data']['data']['uid'] )
+        if ignore.check_ban_inital(uid=uid) == True:
+            return 
         types=event['data']['data']['msg_type'] #判断是关注还是进入
         if types == 1:
             text=content.get_danmaku_on_wuser(event=event)

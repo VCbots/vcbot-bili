@@ -45,8 +45,10 @@ jobs:
           run: pip install -r requirements.txt
         - name: Build
           run: pyinstaller  -F -w --hidden-import=PIL._tkinter_finder --additional-hooks-dir=hooks main.py -n vcbot-bili -i .res\icon.ico
+        - name: pack
+          run: 7z a -tzip build-${{runner.os}}.zip ./dist
         - name: Upload
           uses: actions/upload-artifact@v4
           with: 
             name: build-${{runner.os}}
-            path: ./dist/*
+            path: ./build-${{runner.os}}.zip

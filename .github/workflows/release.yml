@@ -1,6 +1,7 @@
 name: Release
 
 on:
+    workflow_dispatch:
     push:
         tags: v*
     
@@ -8,6 +9,7 @@ jobs:
     build:
         uses: ./.github/workflows/main.yml
     release:
+        needs: build
         runs-on: ubuntu-latest
         steps: 
             - name: download

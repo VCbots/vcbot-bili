@@ -18,7 +18,7 @@ def login():
             c.raise_for_no_bili_jct()
             coco=json.dumps(c.get_cookies(),ensure_ascii=False)
         except:
-            logger.error("Login error!")
+            logger.exception("Login error!")
         finally:
             with open(file="./cookie.json",mode="w",encoding="utf-8",errors="ignore") as cookies:
                 cookies.write(coco)
@@ -93,8 +93,12 @@ def main():
         except UnboundLocalError as e:
             logger.warning(str(e))
 
-    
-    sync(live.LiveDanma.connect())
+    try:
+        sync(live.LiveDanma.connect())
+    except:
+        logger.info("Closing...")
+        sync(live.LiveDanma.disconnect())
+        sys.exit()
 
 if __name__ == "__main__" :
     config.loadroomcfg()

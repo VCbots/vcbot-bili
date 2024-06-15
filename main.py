@@ -31,7 +31,7 @@ def main():
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=config.roomcfg["connected"]))
         except:
-            logger.info("connect command not found!")
+            logger.warning("connect command not found!")
         logger.debug(event)
     
     @live.LiveDanma.on('GUARD_BUY')
@@ -41,20 +41,23 @@ def main():
         text=content.get_danmaku_on_buyguard(event=event)
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
-        except:
-            print(" ")
+        except UnboundLocalError as e:
+            logger.warning(str(e))
+
 
     @live.LiveDanma.on('DANMU_MSG')
     async def on_danmaku(event):
         # 收到弹幕.
         try:
             text=content.get_danmaku_content(event=event)
-        except:
-            print(" ")
+        except UnboundLocalError as e:
+            logger.warning(str(e))
+
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
-        except:
-            print(" ")
+        except UnboundLocalError as e:
+            logger.warning(str(e))
+
 
     @live.LiveDanma.on('INTERACT_WORD')
     async def on_welcome(event):
@@ -74,8 +77,9 @@ def main():
             text=content.get_danmaku_on_user_followed(event=event)
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
-        except:
-            print(" ")
+        except UnboundLocalError as e:
+            logger.warning(str(e))
+
 
         logger.debug(json.dumps(event,ensure_ascii=False))
 
@@ -86,8 +90,9 @@ def main():
         text = content.get_danmaku_on_gift(event=event)
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
-        except:
-            print(" ")
+        except UnboundLocalError as e:
+            logger.warning(str(e))
+
     
     sync(live.LiveDanma.connect())
 

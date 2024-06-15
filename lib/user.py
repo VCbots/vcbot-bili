@@ -1,6 +1,5 @@
 import tkinter as tk
 from bilibili_api import Credential,login,user
-from dotenv import load_dotenv
 
 def user_login():
     a = login.login_with_qrcode(tk.Tk())

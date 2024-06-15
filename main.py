@@ -2,7 +2,9 @@ import os
 import sys
 import json
 from lib import user,live,config,content,ignore
+from loguru import logger
 from bilibili_api import Credential,sync
+
 
 def login():
     global c
@@ -16,7 +18,7 @@ def login():
             c.raise_for_no_bili_jct()
             coco=json.dumps(c.get_cookies(),ensure_ascii=False)
         except:
-            print("error!")
+            logger.error("Login error!")
         finally:
             with open(file="./cookie.json",mode="w",encoding="utf-8",errors="ignore") as cookies:
                 cookies.write(coco)
@@ -29,19 +31,18 @@ def main():
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=config.roomcfg["connected"]))
         except:
-            print("connect command not found!")
-        print(event)
+            logger.info("connect command not found!")
+        logger.debug(event)
     
     @live.LiveDanma.on('GUARD_BUY')
     async def on_guard(event):
         # 上舰长/提督/总督
-        print(json.dumps(event,ensure_ascii=False))
+        logger.debug(json.dumps(event,ensure_ascii=False))
         text=content.get_danmaku_on_buyguard(event=event)
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except:
             print(" ")
-        print(json.dumps(event,ensure_ascii=False))
 
     @live.LiveDanma.on('DANMU_MSG')
     async def on_danmaku(event):
@@ -59,11 +60,12 @@ def main():
     async def on_welcome(event):
         # 用户进入直播间/关注
         if event['data']['data']['is_spread'] == 1:
-            print('spread is true,ignore.')
+            logger.debug(json.dumps(event,ensure_ascii=False))
+            logger.info('spread is true,ignore.')
             return
         uid=str(event['data']['data']['uid'] ) 
         if ignore.check_ban_inital(uid=uid) == True:
-            print('uid_ban is true,ignore.')
+            logger.info('uid_ban is true,ignore.')
             return 
         types=event['data']['data']['msg_type'] #判断是关注还是进入
         if types == 1:
@@ -75,24 +77,23 @@ def main():
         except:
             print(" ")
 
-        print(json.dumps(event,ensure_ascii=False))
+        logger.debug(json.dumps(event,ensure_ascii=False))
 
     @live.LiveDanma.on('SEND_GIFT')
     async def on_gift(event):
         # 收到礼物
-        print(json.dumps(event,ensure_ascii=False))
+        logger.debug(json.dumps(event,ensure_ascii=False))
         text = content.get_danmaku_on_gift(event=event)
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except:
             print(" ")
-
+    
     sync(live.LiveDanma.connect())
 
 if __name__ == "__main__" :
-
     config.loadroomcfg()
-    print(config.roomcfg)
+    logger.info(config.roomcfg)
     login()
     live.set(room=config.room,credential=c)
     main()

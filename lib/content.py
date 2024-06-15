@@ -1,17 +1,18 @@
 from . import user
+from loguru import logger
 import main
 
 def get_danmaku_content(event:str):
     uid=event["data"]["info"][2][0]
     content=event["data"]["info"][1]
-    print(content)
+    logger.info(content)
     try:
         contents=main.config.roomcfg["chat"][f"{uid}"]["command"][content]
     except:
         print(" ")
         try:
             contents=main.config.roomcfg["chat"]["global"]["command"][content]
-            print(contents)
+            logger.info("Reply",contents)
         except:
             print(" ")
     return contents
@@ -25,7 +26,7 @@ def get_danmaku_on_gift(event:str):
         content_name=contents.replace(" {user} ",f"{name}")
         contented=content_name.replace(" {gift} ",f"{giftname}")
     except:
-        print(contented)
+        logger.info(contented)
     return contented
 
 def get_danmaku_on_wuser(event:str):
@@ -35,7 +36,7 @@ def get_danmaku_on_wuser(event:str):
         contents=str(main.config.roomcfg["chat"]["global"]["events"]['welcome'])
         content_name=contents.replace(" {user} ",f"{name}")
     except:
-        print(content_name)
+        logger.info("reply:",content_name)
     return content_name
 
 def get_danmaku_on_buyguard(event:str):
@@ -48,8 +49,7 @@ def get_danmaku_on_buyguard(event:str):
         content_name=contents.replace(" {user} ",f"{name}")
         contented=content_name.replace(" {type} ",f"{giftname}")
     except:
-        print(content_name)
-        print(contented)
+        logger.info("Reply:",contented)
     return contented
 
 def get_danmaku_on_user_followed(event:str):
@@ -60,7 +60,7 @@ def get_danmaku_on_user_followed(event:str):
         contents=str(main.config.roomcfg["chat"]["global"]["events"]['followed'])
         content_name=contents.replace(" {user} ",f"{name}")
     except:
-        print(content_name)
+        logger.info("reply:",content_name)
     return content_name
 
 def get_guard_type(num:int):

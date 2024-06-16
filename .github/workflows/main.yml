@@ -29,27 +29,9 @@ jobs:
         - name: Build
           run: pyinstaller -F --hidden-import=PIL._tkinter_finder --additional-hooks-dir=hooks main.py -n vcbot-bili -i .res/icon.ico
         - name: pack
-          run: 7z a -tzip build-${{runner.os}}.zip ./dist
+          run: 7z a -tzip build-${{matrix.os}}.zip ./dist
         - name: Upload
           uses: actions/upload-artifact@v4
           with: 
             name: build-${{matrix.os}}
-            path: ./build-${{runner.os}}.zip
-    build-windows:
-        if: false
-        runs-on: windows-latest
-        steps:
-        - uses: actions/checkout@v4
-        - name: Setup Python
-          uses: actions/setup-python@v5
-          with:
-            python-version: 3.8
-        - name: Install dependencies
-          run: pip install -r requirements.txt
-        - name: Build
-          run: pyinstaller  -F -w --hidden-import=PIL._tkinter_finder --additional-hooks-dir=hooks main.py -n vcbot-bili -i .res\icon.ico
-        - name: Upload
-          uses: actions/upload-artifact@v4
-          with: 
-            name: build-${{runner.os}}
-            path: ./build-${{runner.os}}.zip
+            path: ./build-${{matrix.os}}.zip

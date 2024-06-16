@@ -59,7 +59,8 @@ def main():
             return
             
         if text == "":
-            return
+            return 
+        
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except UnboundLocalError as e:

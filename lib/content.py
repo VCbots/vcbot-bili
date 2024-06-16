@@ -14,7 +14,7 @@ def get_danmaku_content(event:str):
             logger.info("Reply:"+str(contents))
         except KeyError as e:
             logger.info("command not found!")
-            return
+            return ""
     return contents
 
 def get_danmaku_on_gift(event:str):

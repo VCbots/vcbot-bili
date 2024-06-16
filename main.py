@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-from lib import user,live,config,content,ignore
+from lib import user,live,config,content,ignore,schedule
 from loguru import logger
 from bilibili_api import Credential,sync
 
@@ -48,6 +48,10 @@ def main():
     @live.LiveDanma.on('DANMU_MSG')
     async def on_danmaku(event):
         # 收到弹幕.
+        await user.get_self_uid(Credential=c)
+        if event['data']['info'][2][0] == user.bot_uid:
+            logger.info("The uid is bot_uid,ignore.")
+            return
         try:
             text=content.get_danmaku_content(event=event)
         except UnboundLocalError as e:
@@ -93,12 +97,15 @@ def main():
         except UnboundLocalError as e:
             logger.warning(str(e))
 
+    schedule.main()
     try:
         sync(live.LiveDanma.connect())
     except:
+        #正常关闭
         logger.info("Closing...")
+        schedule.close()
         sync(live.LiveDanma.disconnect())
-        sys.exit()
+        os._exit(0)
 
 if __name__ == "__main__" :
     config.loadroomcfg()

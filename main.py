@@ -1,7 +1,7 @@
 import os
-import sys
 import json
-from lib import user,live,config,content,ignore,schedule
+from lib import user,live
+from util import config,content,ignore,schedule
 from loguru import logger
 from bilibili_api import Credential,sync
 

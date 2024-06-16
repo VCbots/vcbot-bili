@@ -1,4 +1,4 @@
-from . import user
+from lib import user
 from loguru import logger
 import main
 

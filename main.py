@@ -48,15 +48,18 @@ def main():
     @live.LiveDanma.on('DANMU_MSG')
     async def on_danmaku(event):
         # 收到弹幕.
+        text=""
         await user.get_self_uid(Credential=c)
         if event['data']['info'][2][0] == user.bot_uid:
-            logger.info("The uid is bot_uid,ignore.")
             return
         try:
             text=content.get_danmaku_content(event=event)
         except UnboundLocalError as e:
             logger.warning(str(e))
-
+            return
+            
+        if text == "":
+            return
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except UnboundLocalError as e:
@@ -66,6 +69,7 @@ def main():
     @live.LiveDanma.on('INTERACT_WORD')
     async def on_welcome(event):
         # 用户进入直播间/关注
+        text=""
         if event['data']['data']['is_spread'] == 1:
             logger.debug(json.dumps(event,ensure_ascii=False))
             logger.info('spread is true,ignore.')
@@ -79,9 +83,13 @@ def main():
             text=content.get_danmaku_on_wuser(event=event)
         if types == 2:
             text=content.get_danmaku_on_user_followed(event=event)
+        if text == "":
+            return
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except UnboundLocalError as e:
+            logger.warning(str(e))
+        except Exception as e:
             logger.warning(str(e))
 
 
@@ -97,13 +105,20 @@ def main():
         except UnboundLocalError as e:
             logger.warning(str(e))
 
-    schedule.main()
+    skip_schedule = False
+    try:
+        schedule.main()
+    except:
+        skip_schedule=True
+        logger.warning('schedule not set,skiped.')
     try:
         sync(live.LiveDanma.connect())
     except:
         #正常关闭
+        print("\n")
         logger.info("Closing...")
-        schedule.close()
+        if skip_schedule == False:
+            schedule.close()
         sync(live.LiveDanma.disconnect())
         os._exit(0)
 

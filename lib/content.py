@@ -13,7 +13,8 @@ def get_danmaku_content(event:str):
             contents=main.config.roomcfg["chat"]["global"]["command"][content]
             logger.info("Reply:"+str(contents))
         except KeyError as e:
-            logger.warning(str(e))
+            logger.info("command not found!")
+            return
     return contents
 
 def get_danmaku_on_gift(event:str):

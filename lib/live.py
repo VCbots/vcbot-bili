@@ -1,4 +1,4 @@
-from bilibili_api import Credential,live,Danmaku
+from bilibili_api import Credential,Danmaku
 from bilibili_api.live import LiveDanmaku,LiveRoom
 
 def set(room:int,credential:Credential):

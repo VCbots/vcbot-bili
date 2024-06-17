@@ -1,8 +1,12 @@
-from util import config
-from lib import live
+"""
+定时事件逻辑处理
+"""
+
 from loguru import logger
 from threading import Timer
 from bilibili_api import sync
+from lib import live
+from util import config
 
 def schedule_ctrl(min:int,arg:str,type: int):
     sec=min*60

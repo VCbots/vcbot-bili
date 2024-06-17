@@ -1,3 +1,7 @@
+"""
+user
+"""
+
 import tkinter as tk
 from bilibili_api import Credential,login,user
 

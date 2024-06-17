@@ -1,3 +1,7 @@
+"""
+事件逻辑处理
+"""
+
 from lib import user
 from loguru import logger
 import main

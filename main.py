@@ -1,39 +1,59 @@
+"""
+程序主入口
+"""
+
 import os
 import json
-from lib import user,live
-from util import config,content,ignore,schedule
 from loguru import logger
 from bilibili_api import Credential,sync
+from lib import user,live
+from util import config,content,ignore,schedule
 
 
 def login():
-    global c
+    """
+    登录
+    """
+
     try:
-        cook=json.load(open(file=f"./cookie.json"))
-        c = Credential(sessdata=cook["SESSDATA"],bili_jct=cook["bili_jct"],buvid3=cook["buvid3"],ac_time_value=cook["ac_time_value"],dedeuserid=cook["DedeUserID"])
+        cook=json.load(open(file="./cookie.json"))
+        global c
+        c = Credential(
+            sessdata=cook["SESSDATA"],
+            bili_jct=cook["bili_jct"],buvid3=cook["buvid3"],
+            ac_time_value=cook["ac_time_value"],
+            dedeuserid=cook["DedeUserID"]
+        )
     except:
+        logger.info('Can not get Credential,please login with qrcode!')
         c = user.user_login()
         try:
             c.raise_for_no_sessdata()
             c.raise_for_no_bili_jct()
             coco=json.dumps(c.get_cookies(),ensure_ascii=False)
         except:
-            logger.exception("Login error!")
+            logger.exception("Login error!Now exiting...")
+            os._exit(1)
         finally:
+            logger.info("Login successfully!Now will wrote the Credential to cookie.json...")
             with open(file="./cookie.json",mode="w",encoding="utf-8",errors="ignore") as cookies:
                 cookies.write(coco)
+    finally:
+        logger.info('Login successfully!Now starting...')
+    return
 
-
-def main():     
+def main():
     @live.LiveDanma.on('VERIFICATION_SUCCESSFUL')
     async def on_successful(event):
         # 连接成功
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=config.roomcfg["connected"]))
         except:
-            logger.warning("connect command not found!")
+            logger.info("connect command not found!")
+        logger.info("Connect successfully!")
+        logger.info('Start successfully!')
         logger.debug(event)
-    
+
     @live.LiveDanma.on('GUARD_BUY')
     async def on_guard(event):
         # 上舰长/提督/总督
@@ -50,17 +70,17 @@ def main():
         # 收到弹幕.
         text=""
         await user.get_self_uid(Credential=c)
-        if event['data']['info'][2][0] == user.bot_uid:
+        if event['data']['info'][2][0] is user.bot_uid:
             return
         try:
             text=content.get_danmaku_content(event=event)
         except UnboundLocalError as e:
             logger.warning(str(e))
             return
-            
+
         if text == "":
             return 
-        
+
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
         except UnboundLocalError as e:
@@ -75,10 +95,10 @@ def main():
             logger.debug(json.dumps(event,ensure_ascii=False))
             logger.info('spread is true,ignore.')
             return
-        uid=str(event['data']['data']['uid'] ) 
-        if ignore.check_ban_inital(uid=uid) == True:
+        uid=str(event['data']['data']['uid'])
+        if ignore.check_ban_inital(uid=uid) is True:
             logger.info('uid_ban is true,ignore.')
-            return 
+            return
         types=event['data']['data']['msg_type'] #判断是关注还是进入
         if types == 1:
             text=content.get_danmaku_on_wuser(event=event)
@@ -118,9 +138,10 @@ def main():
         #正常关闭
         print("\n")
         logger.info("Closing...")
-        if skip_schedule == False:
+        if skip_schedule is False:
             schedule.close()
         sync(live.LiveDanma.disconnect())
+        logger.info("close successfully!")
         os._exit(0)
 
 if __name__ == "__main__" :
@@ -129,4 +150,3 @@ if __name__ == "__main__" :
     login()
     live.set(room=config.room,credential=c)
     main()
-

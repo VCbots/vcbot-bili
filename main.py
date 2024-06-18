@@ -9,6 +9,7 @@ from bilibili_api import Credential,sync
 from lib import user,live
 from util import config,content,ignore,schedule
 
+C = None
 
 def login():
     """
@@ -17,8 +18,8 @@ def login():
 
     try:
         cook=json.load(open(file="./cookie.json"))
-        global c
-        c = Credential(
+        global C
+        C = Credential(
             sessdata=cook["SESSDATA"],
             bili_jct=cook["bili_jct"],buvid3=cook["buvid3"],
             ac_time_value=cook["ac_time_value"],
@@ -26,11 +27,11 @@ def login():
         )
     except:
         logger.info('Can not get Credential,please login with qrcode!')
-        c = user.user_login()
+        C = user.user_login()
         try:
-            c.raise_for_no_sessdata()
-            c.raise_for_no_bili_jct()
-            coco=json.dumps(c.get_cookies(),ensure_ascii=False)
+            C.raise_for_no_sessdata()
+            C.raise_for_no_bili_jct()
+            coco=json.dumps(C.get_cookies(),ensure_ascii=False)
         except:
             logger.exception("Login error!Now exiting...")
             os._exit(1)
@@ -69,7 +70,7 @@ def main():
     async def on_danmaku(event):
         # 收到弹幕.
         text=""
-        await user.get_self_uid(Credential=c)
+        await user.get_self_uid(Credential=C)
         if event['data']['info'][2][0] is user.bot_uid:
             return
         try:
@@ -148,5 +149,5 @@ if __name__ == "__main__" :
     config.loadroomcfg()
     logger.info(config.roomcfg)
     login()
-    live.room_set(room=config.room,credential=c)
+    live.room_set(room=config.room,credential=C)
     main()

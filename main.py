@@ -43,29 +43,29 @@ def login():
     return
 
 def main():
-    @live.LiveDanma.on('VERIFICATION_SUCCESSFUL')
+    @live.LIVEDANMA.on('VERIFICATION_SUCCESSFUL')
     async def on_successful(event):
         # 连接成功
         try:
-            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=config.roomcfg["connected"]))
+            await live.LIVEROOM.send_danmaku(danmaku=live.Danmaku(text=config.roomcfg["connected"]))
         except:
             logger.info("connect command not found!")
         logger.info("Connect successfully!")
         logger.info('Start successfully!')
         logger.debug(event)
 
-    @live.LiveDanma.on('GUARD_BUY')
+    @live.LIVEDANMA.on('GUARD_BUY')
     async def on_guard(event):
         # 上舰长/提督/总督
         logger.debug(json.dumps(event,ensure_ascii=False))
         text=content.get_danmaku_on_buyguard(event=event)
         try:
-            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
+            await live.LIVEROOM.send_danmaku(danmaku=live.Danmaku(text=text))
         except UnboundLocalError as e:
             logger.warning(str(e))
 
 
-    @live.LiveDanma.on('DANMU_MSG')
+    @live.LIVEDANMA.on('DANMU_MSG')
     async def on_danmaku(event):
         # 收到弹幕.
         text=""
@@ -82,12 +82,12 @@ def main():
             return 
 
         try:
-            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
+            await live.LIVEROOM.send_danmaku(danmaku=live.Danmaku(text=text))
         except UnboundLocalError as e:
             logger.warning(str(e))
 
 
-    @live.LiveDanma.on('INTERACT_WORD')
+    @live.LIVEDANMA.on('INTERACT_WORD')
     async def on_welcome(event):
         # 用户进入直播间/关注
         text=""
@@ -107,7 +107,7 @@ def main():
         if text == "":
             return
         try:
-            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
+            await live.LIVEROOM.send_danmaku(danmaku=live.Danmaku(text=text))
         except UnboundLocalError as e:
             logger.warning(str(e))
         except Exception as e:
@@ -116,13 +116,13 @@ def main():
 
         logger.debug(json.dumps(event,ensure_ascii=False))
 
-    @live.LiveDanma.on('SEND_GIFT')
+    @live.LIVEDANMA.on('SEND_GIFT')
     async def on_gift(event):
         # 收到礼物
         logger.debug(json.dumps(event,ensure_ascii=False))
         text = content.get_danmaku_on_gift(event=event)
         try:
-            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
+            await live.LIVEROOM.send_danmaku(danmaku=live.Danmaku(text=text))
         except UnboundLocalError as e:
             logger.warning(str(e))
 
@@ -133,14 +133,14 @@ def main():
         skip_schedule=True
         logger.warning('schedule not set,skiped.')
     try:
-        sync(live.LiveDanma.connect())
+        sync(live.LIVEDANMA.connect())
     except:
         #正常关闭
         print("\n")
         logger.info("Closing...")
         if skip_schedule is False:
             schedule.close()
-        sync(live.LiveDanma.disconnect())
+        sync(live.LIVEDANMA.disconnect())
         logger.info("close successfully!")
         os._exit(0)
 
@@ -148,5 +148,5 @@ if __name__ == "__main__" :
     config.loadroomcfg()
     logger.info(config.roomcfg)
     login()
-    live.set(room=config.room,credential=c)
+    live.room_set(room=config.room,credential=c)
     main()

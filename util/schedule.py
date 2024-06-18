@@ -2,26 +2,25 @@
 定时事件逻辑处理
 """
 
-from loguru import logger
 from threading import Timer
+from loguru import logger
 from bilibili_api import sync
 from lib import live
 from util import config
 
-def schedule_ctrl(min:int,arg:str,type: int):
-    sec=min*60
-    if type == 1:
+def schedule_ctrl(setmin:int,arg:str,settype: int):
+    sec=setmin*60
+    if settype == 1:
         logger.debug(str(min)+"min "+str(arg))       
         Timer(sec,schedule_run,args=[arg,sec]).setDaemon(True)
         Timer(sec,schedule_run,args=[arg,sec]).start()
-    if type == 2:
+    if settype == 2:
         Timer(sec,schedule_run,args=[arg,sec]).cancel()
-    return
 
 def schedule_run(text:str,sec:int):
     logger.debug(str(sec)+text)
     try:
-        sync(live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text)))
+        sync(live.LIVEROOM.send_danmaku(danmaku=live.Danmaku(text=text)))
     except:
         logger.warning("schedule error!")
     finally:
@@ -32,17 +31,17 @@ def schedule_run(text:str,sec:int):
 def close():
     try:
         cfg = config.roomcfg['chat']['global']['schedule']
-    except:
+    except TypeError:
         return
     n= len(cfg)
     for i in range(0,n,1):
         schedule_ctrl(int(cfg[i]['minute']),str(cfg[i]['content']),2)
     return
 
-def main():
+def create_schedule():
     try:
         cfg = config.roomcfg['chat']['global']['schedule']
-    except:
+    except TypeError:
         return
     n= len(cfg)
     for i in range(0,n,1):

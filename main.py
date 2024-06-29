@@ -8,10 +8,12 @@ from bilibili_api import Credential,sync
 
 def login():
     global c
+    logger.info('Try to login from cookie.json...')
     try:
         cook=json.load(open(file=f"./cookie.json"))
         c = Credential(sessdata=cook["SESSDATA"],bili_jct=cook["bili_jct"],buvid3=cook["buvid3"],ac_time_value=cook["ac_time_value"],dedeuserid=cook["DedeUserID"])
     except:
+        logger.info('Failed!Please login with qrcode!')
         if config.term_env == '1':
             c = user.user_login_term()
         elif config.term_env is None:
@@ -22,6 +24,7 @@ def login():
             coco=json.dumps(c.get_cookies(),ensure_ascii=False)
         except:
             logger.exception("Login error!")
+            os._exit(1)
         finally:
             with open(file="./cookie.json",mode="w",encoding="utf-8",errors="ignore") as cookies:
                 cookies.write(coco)
@@ -31,6 +34,7 @@ def main():
     @live.LiveDanma.on('VERIFICATION_SUCCESSFUL')
     async def on_successful(event):
         # 连接成功
+        logger.info('Connected!')
         try:
             await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=config.roomcfg["connected"]))
         except:
@@ -111,11 +115,13 @@ def main():
 
     skip_schedule = False
     try:
+        logger.info('Loading schedule...')
         schedule.main()
     except:
         skip_schedule=True
         logger.warning('schedule not set,skiped.')
     try:
+        logger.info('Connecting to the liveroom...')
         sync(live.LiveDanma.connect())
     except:
         #正常关闭

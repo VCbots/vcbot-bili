@@ -22,6 +22,7 @@ jobs:
             cache: 'pip' 
             cache-dependency-path: '**/requirements.txt'
         - name: Cache apt dependencies(for linux)
+          if: ${{runner.os == 'Linux'}}
           uses: awalsh128/cache-apt-pkgs-action@latest 
           with: 
             packages: python-tk 

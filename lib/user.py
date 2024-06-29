@@ -1,8 +1,12 @@
-import tkinter as tk
 from bilibili_api import Credential,login,user
 
 def user_login():
+    import tkinter as tk
     a = login.login_with_qrcode(tk.Tk())
+    return a
+
+def user_login_term():
+    a = login.login_with_qrcode_term()
     return a
 
 async def user_info(uid:int,Credential: Credential):

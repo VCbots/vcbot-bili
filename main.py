@@ -12,7 +12,10 @@ def login():
         cook=json.load(open(file=f"./cookie.json"))
         c = Credential(sessdata=cook["SESSDATA"],bili_jct=cook["bili_jct"],buvid3=cook["buvid3"],ac_time_value=cook["ac_time_value"],dedeuserid=cook["DedeUserID"])
     except:
-        c = user.user_login()
+        if config.term_env == '1':
+            c = user.user_login_term()
+        elif config.term_env is None:
+            c = user.user_login()
         try:
             c.raise_for_no_sessdata()
             c.raise_for_no_bili_jct()

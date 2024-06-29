@@ -39,9 +39,9 @@ def get_danmaku_on_wuser(event:str):
     return content_name
 
 def get_danmaku_on_buyguard(event:str):
-    info = event['data']
+    info = event['data']['data']
     print(info)
-    giftname=get_guard_type(int(info["guard_level"]))
+    giftname=info['gift_name']
     name= info['username']
     try:
         contents=str(main.config.roomcfg["chat"]["global"]["events"]['guard'])

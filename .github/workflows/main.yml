@@ -3,12 +3,10 @@ name: build CI
 on:
     pull_request:
         branches: master
-        paths:
-          - **/*.py
+        paths: /*/*.py
     push:
         branches: master
-        paths: 
-          - **/*.py
+        paths: /*/*.py
     workflow_dispatch:
     workflow_call:
 

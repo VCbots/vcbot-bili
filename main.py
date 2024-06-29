@@ -28,6 +28,7 @@ def login():
         finally:
             with open(file="./cookie.json",mode="w",encoding="utf-8",errors="ignore") as cookies:
                 cookies.write(coco)
+    logger.info('Login successfully!')
 
 
 def main():     

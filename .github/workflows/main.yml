@@ -19,11 +19,13 @@ jobs:
           uses: actions/setup-python@v5
           with:
             python-version: 3.8
-        - name: Install dependencies(for linux)
-          if: ${{runner.os == 'Linux'}}
-          run: |
-            sudo apt-get update
-            sudo apt-get install python-tk
+            cache: 'pip' 
+            cache-dependency-path: '**/requirements.txt'
+        - name: Cache apt dependencies(for linux)
+          uses: awalsh128/cache-apt-pkgs-action@latest 
+          with: 
+            packages: python-tk 
+            execute_install_scripts: true
         - name: Install dependencies
           run: pip install -r requirements.txt
         - name: Build

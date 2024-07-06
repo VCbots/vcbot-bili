@@ -1,4 +1,4 @@
-bilibili_api_python==16.2.0
 loguru==0.7.2
 pyinstaller==6.8.0
 python-dotenv==1.0.1
+git+https://github.com/Nemo2011/bilibili-api@main

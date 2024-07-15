@@ -31,15 +31,13 @@ def login():
     logger.info('Login successfully!')
 
 
+        
 def main():     
     @live.LiveDanma.on('VERIFICATION_SUCCESSFUL')
     async def on_successful(event):
         # 连接成功
         logger.info('Connected!')
-        try:
-            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=config.roomcfg["connected"]))
-        except:
-            logger.warning("connect command not found!")
+        await live.send_danmu(text=config.roomcfg["connected"])
         logger.debug(event)
     
     @live.LiveDanma.on('GUARD_BUY')
@@ -47,10 +45,8 @@ def main():
         # 上舰长/提督/总督
         logger.debug(json.dumps(event,ensure_ascii=False))
         text=content.get_danmaku_on_buyguard(event=event)
-        try:
-            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
-        except UnboundLocalError as e:
-            logger.warning(str(e))
+        await live.send_danmu(text=text)
+
 
 
     @live.LiveDanma.on('DANMU_MSG')
@@ -69,10 +65,8 @@ def main():
         if text == "":
             return 
         
-        try:
-            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
-        except UnboundLocalError as e:
-            logger.warning(str(e))
+        await live.send_danmu(text=text)
+
 
 
     @live.LiveDanma.on('INTERACT_WORD')
@@ -94,12 +88,8 @@ def main():
             text=content.get_danmaku_on_user_followed(event=event)
         if text == "":
             return
-        try:
-            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
-        except UnboundLocalError as e:
-            logger.warning(str(e))
-        except Exception as e:
-            logger.warning(str(e))
+        await live.send_danmu(text=text)
+
 
 
         logger.debug(json.dumps(event,ensure_ascii=False))
@@ -109,15 +99,13 @@ def main():
         # 收到礼物
         logger.debug(json.dumps(event,ensure_ascii=False))
         text = content.get_danmaku_on_gift(event=event)
-        try:
-            await live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text))
-        except UnboundLocalError as e:
-            logger.warning(str(e))
+
+        await live.send_danmu(text=text)
 
     skip_schedule = False
     try:
         logger.info('Loading schedule...')
-        schedule.main()
+        schedule.start()
     except:
         skip_schedule=True
         logger.warning('schedule not set,skiped.')

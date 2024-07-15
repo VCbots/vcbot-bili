@@ -16,7 +16,7 @@ def schedule_ctrl(min:int,arg:str,type: int):
 def schedule_run(text:str,sec:int):
     logger.debug(str(sec)+text)
     try:
-        sync(live.liveroom.send_danmaku(danmaku=live.Danmaku(text=text)))
+        sync(live.send_danmu(text=text))
     except:
         logger.warning("schedule error!")
     finally:
@@ -34,7 +34,7 @@ def close():
         schedule_ctrl(int(cfg[i]['minute']),str(cfg[i]['content']),2)
     return
 
-def main():
+def start():
     try:
         cfg = config.roomcfg['chat']['global']['schedule']
     except:
@@ -43,3 +43,4 @@ def main():
     for i in range(0,n,1):
         schedule_ctrl(int(cfg[i]['minute']),str(cfg[i]['content']),1)
     return
+

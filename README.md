@@ -58,7 +58,6 @@ term_env=[终端扫码，启用填1即可]
                 }
         },
         "xxxx": {
-            // 
             "alias":[], 
             "command":{
                 "你好":"hello!",

@@ -27,14 +27,13 @@ term_env=[终端扫码，启用填1即可]
 3. 创建`[房间id].json`,并填写以下内容
 
 <details>
-<summary>填写事例</summary>
+<summary>示例</summary>
 
 ```
 {
     "connected": "连接成功", 
     "chat":{
         "global":{
-
             "schedule":[
                 {
                     "minute":1,
@@ -45,8 +44,8 @@ term_env=[终端扫码，启用填1即可]
                     "content":"q群：xxx"
                 }
             ],
-
             "events":{
+                    "reply_notice": " {user} 回复 {re-user} : {content} ",
                     "welcome": "欢迎 {user} 进入直播间",
                     "gifts": "谢谢 {user} 的 {gift} 喵～",
                     "guard": "感谢 {user} 开通 {type} 喵～",
@@ -95,6 +94,15 @@ term_env=[终端扫码，启用填1即可]
 |-|-|
 |alias|别称，todo|
 |command|互动事件|
+
+#### 替换常量
+
+|字段|备注|
+|-|-|
+|{user}|替换成用户名|
+|{re-user}|替换为被@用户|
+|{gift}|替换为礼物名称|
+|{type} |替换为开通大航海类型|
 
 </details>
 

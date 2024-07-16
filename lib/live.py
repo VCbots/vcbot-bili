@@ -21,15 +21,16 @@ async def send_danmu(text: str = None):
             text_splited=text[i:i+20]
             print(text_splited)
             try:
-                sleep(random.random()+0.1) #防止api返回 10030（您发送弹幕的频率过快）
+                sleep(random.random()+0.2) #防止api返回 10030（您发送弹幕的频率过快）
                 await liveroom.send_danmaku(danmaku=Danmaku(text=text_splited))
             except UnboundLocalError as e:
                 logger.warning(str(e))
-            except:
+            except BaseException as e:
+                logger.warning(str(e))
                 return
     else:    
         try:
-            sleep(random.random()+0.1) #防止api返回 10030（您发送弹幕的频率过快）
+            sleep(random.random()+0.2) #防止api返回 10030（您发送弹幕的频率过快）
             await liveroom.send_danmaku(danmaku=Danmaku(text=text))
         except UnboundLocalError as e:
             logger.warning(str(e))
@@ -40,5 +41,4 @@ def get_room_owner_uid():
     i = sync(liveroom.get_room_info())
     global owner_uid
     owner_uid = str(i['room_info']['uid'])
-    print(owner_uid)
     return owner_uid

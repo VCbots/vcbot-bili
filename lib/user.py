@@ -18,6 +18,5 @@ def get_self_uid(Credential: Credential):
     i= sync( user.get_self_info(credential=Credential))
     global bot_uid
     bot_uid=str(i['mid'])
-    print(bot_uid)
     return bot_uid
 

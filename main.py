@@ -1,6 +1,7 @@
 import os
 import json
-from lib import user,live,config,content,ignore,schedule
+import time
+from lib import user,live,config,content,ignore,schedule,at
 from loguru import logger
 from bilibili_api import Credential,sync
 
@@ -53,8 +54,16 @@ def main():
     async def on_danmaku(event):
         # 收到弹幕.
         text=""
-        if event['data']['info'][2][0] == user.bot_uid:
+        
+        if str(event['data']['info'][2][0]) == user.bot_uid:
             return
+        
+        if at.check_at(event=event) is True:
+            await at.send_at_notice(event=event)
+            logger.info('The danmaku has @user,reminded.')
+            return
+        
+
         try:
             text=content.get_danmaku_content(event=event)
         except UnboundLocalError as e:

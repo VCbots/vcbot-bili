@@ -1,4 +1,4 @@
-from bilibili_api import Credential,login,user
+from bilibili_api import Credential,login,user,sync
 
 def user_login():
     import tkinter as tk
@@ -14,8 +14,10 @@ async def user_info(uid:int,Credential: Credential):
     info = await u.get_user_info()
     return info
 
-async def get_self_uid(Credential: Credential):
-    i= await user.get_self_info(credential=Credential)
+def get_self_uid(Credential: Credential):
+    i= sync( user.get_self_info(credential=Credential))
     global bot_uid
-    bot_uid=i['mid']
+    bot_uid=str(i['mid'])
+    print(bot_uid)
     return bot_uid
+

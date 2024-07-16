@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 from lib import user,live,config,content,ignore,schedule
 from loguru import logger
@@ -28,6 +27,7 @@ def login():
         finally:
             with open(file="./cookie.json",mode="w",encoding="utf-8",errors="ignore") as cookies:
                 cookies.write(coco)
+    user.get_self_uid(c)
     logger.info('Login successfully!')
 
 
@@ -53,7 +53,6 @@ def main():
     async def on_danmaku(event):
         # 收到弹幕.
         text=""
-        await user.get_self_uid(Credential=c)
         if event['data']['info'][2][0] == user.bot_uid:
             return
         try:
@@ -81,6 +80,10 @@ def main():
         if ignore.check_ban_inital(uid=uid) == True:
             logger.info('uid_ban is true,ignore.')
             return 
+        if str(uid) == live.owner_uid:
+            logger.info('The uid is room owner,ignore.')
+            return 
+        
         types=event['data']['data']['msg_type'] #判断是关注还是进入
         if types == 1:
             text=content.get_danmaku_on_wuser(event=event)
@@ -97,10 +100,10 @@ def main():
     @live.LiveDanma.on('SEND_GIFT')
     async def on_gift(event):
         # 收到礼物
+        
         logger.debug(json.dumps(event,ensure_ascii=False))
         text = content.get_danmaku_on_gift(event=event)
 
-        await live.send_danmu(text=text)
 
     skip_schedule = False
     try:

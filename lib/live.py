@@ -1,7 +1,8 @@
 import random
+import json
 from time import sleep
 from loguru import logger
-from bilibili_api import Credential,Danmaku
+from bilibili_api import Credential,Danmaku,sync
 from bilibili_api.live import LiveDanmaku,LiveRoom
 
 def set(room:int,credential:Credential):
@@ -9,6 +10,7 @@ def set(room:int,credential:Credential):
     LiveDanma = LiveDanmaku(room_display_id=room,credential=credential)
     global liveroom
     liveroom = LiveRoom(room_display_id=room,credential=credential)
+    get_room_owner_uid()
     return
 
 async def send_danmu(text: str = None):
@@ -23,9 +25,20 @@ async def send_danmu(text: str = None):
                 await liveroom.send_danmaku(danmaku=Danmaku(text=text_splited))
             except UnboundLocalError as e:
                 logger.warning(str(e))
+            except:
+                return
     else:    
         try:
             sleep(random.random()+0.1) #防止api返回 10030（您发送弹幕的频率过快）
             await liveroom.send_danmaku(danmaku=Danmaku(text=text))
         except UnboundLocalError as e:
             logger.warning(str(e))
+        except:
+            return
+            
+def get_room_owner_uid():
+    i = sync(liveroom.get_room_info())
+    global owner_uid
+    owner_uid = str(i['room_info']['uid'])
+    print(owner_uid)
+    return owner_uid

@@ -1,7 +1,9 @@
 __pycache__
 __pypackages__
+logs
 .env
 build
 dist
 *.spec
 *.json
+*.jsonc

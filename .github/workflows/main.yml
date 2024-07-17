@@ -32,9 +32,9 @@ jobs:
         - name: Build
           run: pyinstaller -F --hidden-import=PIL._tkinter_finder --additional-hooks-dir=hooks main.py -n vcbot-bili -i .res/icon.ico
         - name: pack
-          run: 7z a -tzip build-${{matrix.os}}.zip ./dist
+          run: 7z a -tzip ${{runner.os}}-${{runner.arch}}.zip ./dist
         - name: Upload
           uses: actions/upload-artifact@v4
           with: 
             name: build-${{matrix.os}}
-            path: ./build-${{matrix.os}}.zip
+            path: ./${{runner.os}}-${{runner.arch}}.zip

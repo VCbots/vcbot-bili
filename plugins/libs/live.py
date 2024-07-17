@@ -30,15 +30,17 @@ def get_room_owner_uid():
     return owner_uid
 
 async def _send_it(text:str):
+    failed=False
+    sleep(random.random()+0.2)  #预防api返回 10030/10031（您发送弹幕的频率过快)
     try:
-        sleep(random.random()+0.2)  #预防api返回 10030（您发送弹幕的频率过快)
         await liveroom.send_danmaku(danmaku=Danmaku(text=text))
     except BaseException as e:
+        failed = True
         logger.warning(f'send failed:{e}')
-        if str(e).find('10030',0) != -1 or str(e) == 'Server disconnected': 
-            logger.warning(f'Trying to resend({text})...')
-            sleep(random.random()+0.1) 
+        if str(e).find('您发送弹幕的频率过快',0) != -1 or str(e) == 'Server disconnected': #过分了（弹幕发送过快/断开连接-->1s后重新发送）
+            logger.warning(f'Trying to resend({text}) in 1-2s...')
+            sleep(1+random.random()) 
             await _send_it(text=text)
-        return
     finally:
-        logger.info(f'sended:{text}')
+        if failed is False:
+            logger.info(f'sended:{text}')

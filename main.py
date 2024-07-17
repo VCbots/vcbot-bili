@@ -1,6 +1,6 @@
 import os
 import json
-import time
+import datetime
 from lib import user,live,config,content,ignore,schedule,at
 from loguru import logger
 from bilibili_api import Credential,sync
@@ -101,9 +101,6 @@ def main():
         if text == "":
             return
         await live.send_danmu(text=text)
-
-
-
         logger.debug(json.dumps(event,ensure_ascii=False))
 
     @live.LiveDanma.on('SEND_GIFT')
@@ -112,6 +109,8 @@ def main():
         
         logger.debug(json.dumps(event,ensure_ascii=False))
         text = content.get_danmaku_on_gift(event=event)
+        await live.send_danmu(text=text)
+        
 
 
     skip_schedule = False
@@ -134,8 +133,9 @@ def main():
         os._exit(0)
 
 if __name__ == "__main__" :
+    today=datetime.date.today()
+    logger.add(f'./logs/log-{str(today)}.log',format='{time} {level} {function} - {message}')
     config.loadroomcfg()
-    logger.info(config.roomcfg)
     login()
     live.set(room=config.room,credential=c)
     main()

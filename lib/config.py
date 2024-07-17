@@ -1,5 +1,6 @@
 import os
 import json
+from loguru import logger
 from dotenv import load_dotenv
 
 def loadroomcfg():
@@ -11,4 +12,5 @@ def loadroomcfg():
     print(term_env)
     global roomcfg
     roomcfg = json.load(open(f"./{room}.json",encoding="utf-8",errors="ignore"))
+    logger.info(str(roomcfg))
     return

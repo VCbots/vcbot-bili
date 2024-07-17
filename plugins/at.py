@@ -1,6 +1,6 @@
 import json
 from bilibili_api import sync
-from . import live,config
+from .libs import live,config
 
 
 

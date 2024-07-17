@@ -1,16 +1,15 @@
-from . import user
 from loguru import logger
-import main
+from .libs import config
 
 def get_danmaku_content(event:str):
     uid=event["data"]["info"][2][0]
     content=event["data"]["info"][1]
     logger.info(content)
     try:
-        contents=main.config.roomcfg["chat"][f"{uid}"]["command"][content]
+        contents=config.roomcfg["chat"][f"{uid}"]["command"][content]
     except:
         try:
-            contents=main.config.roomcfg["chat"]["global"]["command"][content]
+            contents=config.roomcfg["chat"]["global"]["command"][content]
             logger.info("Reply:"+str(contents))
         except KeyError as e:
             return ""
@@ -21,7 +20,7 @@ def get_danmaku_on_gift(event:str):
     giftname=info['giftName']
     name= info['uname']
     try:
-        contents=str(main.config.roomcfg["chat"]["global"]["events"]['gifts'])
+        contents=str(config.roomcfg["chat"]["global"]["events"]['gifts'])
         content_name=contents.replace(" {user} ",f"{name}")
         contented=content_name.replace(" {gift} ",f"{giftname}")
     except:
@@ -32,7 +31,7 @@ def get_danmaku_on_wuser(event:str):
     info = event['data']['data']
     name= info['uname']
     try:
-        contents=str(main.config.roomcfg["chat"]["global"]["events"]['welcome'])
+        contents=str(config.roomcfg["chat"]["global"]["events"]['welcome'])
         content_name=contents.replace(" {user} ",f"{name}")
     except:
         logger.info("reply:"+str(content_name))
@@ -43,10 +42,12 @@ def get_danmaku_on_buyguard(event:str):
     print(info)
     giftname=info['gift_name']
     name= info['username']
+    num= info['num']
     try:
-        contents=str(main.config.roomcfg["chat"]["global"]["events"]['guard'])
+        contents=str(config.roomcfg["chat"]["global"]["events"]['guard'])
         content_name=contents.replace(" {user} ",f"{name}")
-        contented=content_name.replace(" {type} ",f"{giftname}")
+        content_num=content_name.replace(" {type} ",f"{giftname}")
+        contented=content_num.replace(" {num} ",f"{num}")
     except:
         logger.info("Reply:"+str(contented))
     return contented
@@ -56,13 +57,13 @@ def get_danmaku_on_user_followed(event:str):
     info = event['data']['data']
     name= info['uname']
     try:
-        contents=str(main.config.roomcfg["chat"]["global"]["events"]['followed'])
+        contents=str(config.roomcfg["chat"]["global"]["events"]['followed'])
         content_name=contents.replace(" {user} ",f"{name}")
     except:
         logger.info("reply:"+str(content_name))
     return content_name
 
-def get_guard_type(num:int):
+def _get_guard_type(num:int):
     if num == 1:
         return "总督"
     if num == 2:

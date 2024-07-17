@@ -38,7 +38,7 @@ async def _send_it(text:str):
         if str(e).find('10030',0) != -1 or str(e) == 'Server disconnected': 
             logger.warning(f'Trying to resend({text})...')
             sleep(random.random()+0.1) 
-            _send_it(text=text)
+            await _send_it(text=text)
         return
     finally:
         logger.info(f'sended:{text}')

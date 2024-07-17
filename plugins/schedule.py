@@ -1,4 +1,4 @@
-from . import config,live
+from .libs import config,live
 from loguru import logger
 from threading import Timer
 from bilibili_api import sync

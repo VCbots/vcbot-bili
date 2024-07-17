@@ -17,4 +17,4 @@ jobs:
             - name: create release
               uses: softprops/action-gh-release@v2.0.6
               with:
-                files: ./**/build-**.zip
+                files: ./**/**.zip

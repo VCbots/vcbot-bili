@@ -1,10 +1,10 @@
 import os
 import json
 import datetime
-from lib import user,live,config,content,ignore,schedule,at
 from loguru import logger
 from bilibili_api import Credential,sync
-
+from plugins.libs import user,live,config
+from plugins import content,ignore,schedule,at
 
 def login():
     global c
@@ -132,11 +132,14 @@ def main():
         sync(live.LiveDanma.disconnect())
         os._exit(0)
 
-if __name__ == "__main__" :
+def start():
     today=datetime.date.today()
     logger.add(f'./logs/log-{str(today)}.log',format='{time} {level} {function} - {message}')
+    logger.info('Starting...')
     config.loadroomcfg()
     login()
     live.set(room=config.room,credential=c)
     main()
 
+if __name__ == "__main__" :
+    start()

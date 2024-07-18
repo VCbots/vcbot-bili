@@ -20,9 +20,9 @@ async def on_blind(event:str):
 
 def _check_total(total:int):
     if total > 0:
-        return f'赚{total}元'
+        return f'赚{total:0.2f}元'
     elif total < 0: 
-        return f'亏{abs(total)}元'
+        return f'亏{abs(total):0.2f}元'
     else:
         return ''
 

@@ -15,7 +15,7 @@ def on_blind(event:str):
     
     text1=_check_total(totals)
     final_text=f'{user_name}{action}{origin_gift}{origin_action}{gift_name},{text1}' #懒得写到roomcfg里了
-    live.send_danmu(text=final_text)
+    sync(live.send_danmu(text=final_text))
 
 
 def _check_total(total:int):

@@ -4,7 +4,7 @@ import datetime
 from loguru import logger
 from bilibili_api import Credential,sync
 from plugins.libs import user,live,config
-from plugins import content,ignore,schedule,at
+from plugins import content,ignore,schedule,at,blind
 
 def login():
     global c
@@ -56,6 +56,7 @@ def main():
         text=""
         
         if str(event['data']['info'][2][0]) == user.bot_uid:
+            #这里不写log，防止刷日志
             return
         
         if at.check_at(event=event) is True:
@@ -66,7 +67,7 @@ def main():
 
         try:
             text=content.get_danmaku_content(event=event)
-        except UnboundLocalError as e:
+        except BaseException as e:
             logger.warning(str(e))
             return
             
@@ -106,8 +107,12 @@ def main():
     @live.LiveDanma.on('SEND_GIFT')
     async def on_gift(event):
         # 收到礼物
-        
         logger.debug(json.dumps(event,ensure_ascii=False))
+        
+        if event['data']['data']['blind_gift'] != None:
+            blind.on_blind(event=event)
+            logger.info('The gift was blind gift,it will replace.')
+            return
         text = content.get_danmaku_on_gift(event=event)
         await live.send_danmu(text=text)
         

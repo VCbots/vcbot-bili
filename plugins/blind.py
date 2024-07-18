@@ -1,7 +1,7 @@
 from bilibili_api import sync
 from .libs import live,config
 
-def on_blind(event:str):
+async def on_blind(event:str):
     blind=event['data']['data']['blind_gift']
     origin_gift=blind['original_gift_name']
     price=int(blind['original_gift_price'])/1000 #int后转成金额
@@ -15,7 +15,7 @@ def on_blind(event:str):
     
     text1=_check_total(totals)
     final_text=f'{user_name}{action}{origin_gift}{origin_action}{gift_name},{text1}' #懒得写到roomcfg里了
-    sync(live.send_danmu(text=final_text))
+    await live.send_danmu(text=final_text)
 
 
 def _check_total(total:int):

@@ -110,7 +110,7 @@ def main():
         logger.debug(json.dumps(event,ensure_ascii=False))
         
         if event['data']['data']['blind_gift'] != None:
-            blind.on_blind(event=event)
+            await blind.on_blind(event=event)
             logger.info('The gift was blind gift,it will replace.')
             return
         text = content.get_danmaku_on_gift(event=event)

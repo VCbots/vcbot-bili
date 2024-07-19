@@ -1,5 +1,4 @@
-from bilibili_api import sync
-from .libs import live,config
+from .libs import live
 
 async def on_blind(event:str):
     blind=event['data']['data']['blind_gift']

@@ -1,5 +1,4 @@
 import json
-from bilibili_api import sync
 from .libs import live,config
 
 

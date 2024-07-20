@@ -10,18 +10,19 @@ async def on_blind(event:str):
     gift_name=event['data']['data']['giftName']
     user_name=event['data']['data']['uname']
     action=event["data"]['data']['action']
-    totals=gift_price - price
+    num=int(event["data"]['data']['num'])
+    totals=(gift_price - price)*num
     
     text1=_check_total(totals)
-    final_text=f'{user_name}{action}{origin_gift}{origin_action}{gift_name},{text1}' #懒得写到roomcfg里了
+    final_text=f'{user_name}{origin_action}{gift_name}x{num},{text1}' #懒得写到roomcfg里了
     await live.send_danmu(text=final_text)
 
 
 def _check_total(total:int):
     if total > 0:
-        return f'赚{total:0.2f}元'
+        return f'赚{total:0.1f}元'
     elif total < 0: 
-        return f'亏{abs(total):0.2f}元'
+        return f'亏{abs(total):0.1f}元'
     else:
         return ''
 

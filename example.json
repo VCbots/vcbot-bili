@@ -4,11 +4,11 @@
         "global": {
             "schedule": [
                 {
-                    "mintue": 30,
+                    "minute": 30,
                     "content": "主包记得喝水！"
                 },
                 {
-                    "mintue": 15,
+                    "minute": 15,
                     "content": "关注上舰送灯牌，寻找主包不迷路～"
                 }
             ],

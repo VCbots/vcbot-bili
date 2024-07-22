@@ -38,8 +38,8 @@ def main():
     async def on_successful(event):
         # 连接成功
         logger.info('Connected!')
-        if config.plugins_cfg['connect']['enable'] is True:
-            await live.send_danmu(text=config.plugins_cfg["connect"]['message'])
+        if config.plugins_cfg['connected']['enable'] is True:
+            await live.send_danmu(text=config.plugins_cfg["connected"]['message'])
         logger.debug(event)
     
     @live.LiveDanma.on('GUARD_BUY')
@@ -110,7 +110,7 @@ def main():
     async def on_gift(event):
         # 收到礼物
         logger.debug(json.dumps(event,ensure_ascii=False))
-        if config.plugins_cfg['gift']['enable'] is False:
+        if config.plugins_cfg['gifts']['enable'] is False:
             return
         if event['data']['data']['blind_gift'] != None and config.plugins_cfg['blind']['enable'] is True:
             await blind.on_blind(event=event)

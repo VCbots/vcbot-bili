@@ -20,7 +20,7 @@ def get_danmaku_on_gift(event:str):
     giftname=info['giftName']
     name= info['uname']
     try:
-        contents=str(config.plugins_cfg['gift']['message'])
+        contents=str(config.plugins_cfg['gifts']['message'])
         content_name=contents.replace(" {user} ",f"{name}")
         contented=content_name.replace(" {gift} ",f"{giftname}")
     except:

@@ -24,11 +24,8 @@ def loadroomcfg():
     return
 
 def _make_default_cfg():
-    try:
-        os.remove(f"./{room}.json")
-    finally:
-        with open(file=f"./{room}.json",mode="w",encoding="utf-8",errors="ignore") as cookies:
-            cookies.write(json.dumps(default,ensure_ascii=False))
+    with open(file=f"./{room}.json",mode="w",encoding="utf-8",errors="ignore") as cookies:
+        cookies.write(json.dumps(default,ensure_ascii=False))
             
 if __name__ == "__main__":
     #方便转换，直接运行这个py文件

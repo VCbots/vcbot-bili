@@ -38,14 +38,16 @@ def main():
     async def on_successful(event):
         # 连接成功
         logger.info('Connected!')
-        await live.send_danmu(text=config.roomcfg["connected"])
+        if config.plugins_cfg['connect']['enable'] is True:
+            await live.send_danmu(text=config.plugins_cfg["connect"]['message'])
         logger.debug(event)
     
     @live.LiveDanma.on('GUARD_BUY')
     async def on_guard(event):
         # 上舰长/提督/总督
         logger.debug(json.dumps(event,ensure_ascii=False))
-        text=content.get_danmaku_on_buyguard(event=event)
+        if config.plugins_cfg['guard']['enable'] is True:
+            text=content.get_danmaku_on_buyguard(event=event)
         await live.send_danmu(text=text)
 
 
@@ -95,9 +97,9 @@ def main():
             return 
         
         types=event['data']['data']['msg_type'] #判断是关注还是进入
-        if types == 1:
+        if types == 1 and config.plugins_cfg['welcome']['enable'] is True:
             text=content.get_danmaku_on_wuser(event=event)
-        if types == 2:
+        if types == 2 and config.plugins_cfg['followed']['enable'] is True:
             text=content.get_danmaku_on_user_followed(event=event)
         if text == "":
             return
@@ -108,8 +110,9 @@ def main():
     async def on_gift(event):
         # 收到礼物
         logger.debug(json.dumps(event,ensure_ascii=False))
-        
-        if event['data']['data']['blind_gift'] != None:
+        if config.plugins_cfg['gift']['enable'] is False:
+            return
+        if event['data']['data']['blind_gift'] != None and config.plugins_cfg['blind']['enable'] is True:
             await blind.on_blind(event=event)
             logger.info('The gift was blind gift,it will replace.')
             return

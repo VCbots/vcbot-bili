@@ -20,7 +20,7 @@ def get_danmaku_on_gift(event:str):
     giftname=info['giftName']
     name= info['uname']
     try:
-        contents=str(config.roomcfg["chat"]["global"]["events"]['gifts'])
+        contents=str(config.plugins_cfg['gift']['message'])
         content_name=contents.replace(" {user} ",f"{name}")
         contented=content_name.replace(" {gift} ",f"{giftname}")
     except:
@@ -31,7 +31,7 @@ def get_danmaku_on_wuser(event:str):
     info = event['data']['data']
     name= info['uname']
     try:
-        contents=str(config.roomcfg["chat"]["global"]["events"]['welcome'])
+        contents=str(config.plugins_cfg['welcome']['message'])
         content_name=contents.replace(" {user} ",f"{name}")
     except:
         logger.info("reply:"+str(content_name))
@@ -44,7 +44,7 @@ def get_danmaku_on_buyguard(event:str):
     name= info['username']
     num= info['num']
     try:
-        contents=str(config.roomcfg["chat"]["global"]["events"]['guard'])
+        contents=str(config.plugins_cfg['guard']['message'])
         content_name=contents.replace(" {user} ",f"{name}")
         content_num=content_name.replace(" {type} ",f"{giftname}")
         contented=content_num.replace(" {num} ",f"{num}")
@@ -57,7 +57,7 @@ def get_danmaku_on_user_followed(event:str):
     info = event['data']['data']
     name= info['uname']
     try:
-        contents=str(config.roomcfg["chat"]["global"]["events"]['followed'])
+        contents=str(config.plugins_cfg['followed']['message'])
         content_name=contents.replace(" {user} ",f"{name}")
     except:
         logger.info("reply:"+str(content_name))

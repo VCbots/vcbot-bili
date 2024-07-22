@@ -29,3 +29,10 @@ def _make_default_cfg():
     finally:
         with open(file=f"./{room}.json",mode="w",encoding="utf-8",errors="ignore") as cookies:
             cookies.write(json.dumps(default,ensure_ascii=False))
+            
+if __name__ == "__main__":
+    #方便转换，直接运行这个py文件
+    roomcfg = json.load(open("example.json",encoding="utf-8",errors="ignore"))
+    print(roomcfg)
+    with open('dist.txt',encoding='utf-8',errors='ignore',mode='w') as dists:
+        dists.write(str(roomcfg))

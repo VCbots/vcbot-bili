@@ -8,6 +8,9 @@
 
 </div>
 
+## 已迁移
+
+**本仓库已迁移到[vcbot-bili-new](https://github.com/VCbots/vcbot-bili-new)继续更新**
 
 ## 开发原因
 
